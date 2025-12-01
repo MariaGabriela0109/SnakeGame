@@ -11,7 +11,7 @@ namespace SnakeGame
         private int linhas;
         private int colunas;
         public string[,] mat;
-        private int linhaAlimeno;
+        private int linhaAlimento;
         private int colunaAlimento;
 
         public int Linhas
@@ -26,8 +26,8 @@ namespace SnakeGame
         }
         public int LinhaAlimeno
         {
-            get { return linhaAlimeno; }
-            set { linhaAlimeno = value; }
+            get { return linhaAlimento; }
+            set { linhaAlimento = value; }
         }
         public int ColunaAlimento
         {
@@ -45,8 +45,36 @@ namespace SnakeGame
                 }
             }
         }
+        public void GerarAlimento(int[,] corpoCobra, int tamanhoCobra)
+        {
+            bool posicaoValida = false;
+            Random r = new Random();
+            int aux1 = 0, aux2 = 0;
+
+            while (!posicaoValida)
+            {
+                aux1 = r.Next(0, linhas);
+                aux2 = r.Next(0, colunas);
+
+                posicaoValida = true;
+
+                for(int i = 0; i < tamanhoCobra; i++)
+                {
+                    if (corpoCobra[0,i] == aux1 && corpoCobra[1,i] == aux2)
+                    {
+                        posicaoValida = false;
+                        break;
+                    }
+                }
+            }
+            linhaAlimento = aux1;
+            colunaAlimento = aux2;
+        }
+
         public void Desenhar(Cobra cobra)
         {
+            GerarAlimento(cobra.Corpo, cobra.Tamanho);
+
             Console.Clear();
             for (int i = 0; i < mat.GetLength(0); i++)
             {
@@ -73,7 +101,6 @@ namespace SnakeGame
                         mat[i, j] = " ";
                     }
                 }
-                mat[linhaAlimeno, colunaAlimento] = "🍎";
             }
             for (int i = 0; i < mat.GetLength(0); i++)
             {
