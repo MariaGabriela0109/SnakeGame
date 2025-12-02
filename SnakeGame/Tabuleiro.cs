@@ -35,16 +35,27 @@ namespace SnakeGame
             set { colunaAlimento = value; }
         }
 
+        public Tabuleiro(int linhas, int colunas)
+        {
+            this.linhas = linhas;
+            this.colunas = colunas;
+            mat = new string[linhas, colunas];
+            linhaAlimento = -1;
+            colunaAlimento = -1;
+            Iniciar();
+        }
+
         public void Iniciar()
         {
-            for(int i = 0; i < mat.GetLength(0); i++)
+            for (int i = 0; i < mat.GetLength(0); i++)
             {
-                for(int j = 0; j < mat.GetLength(1); j++)
+                for (int j = 0; j < mat.GetLength(1); j++)
                 {
                     mat[i, j] = " ";
                 }
             }
         }
+
         public void GerarAlimento(int[,] corpoCobra, int tamanhoCobra)
         {
             bool posicaoValida = false;
@@ -71,53 +82,47 @@ namespace SnakeGame
             colunaAlimento = aux2;
         }
 
-        public void Desenhar(Cobra cobra)
+        private bool EhCobra(Cobra cobra, int linha, int coluna)
         {
-            GerarAlimento(cobra.Corpo, cobra.Tamanho);
-
-            Console.Clear();
-            for (int i = 0; i < mat.GetLength(0); i++)
+            for (int i = 0; i < cobra.Tamanho; i++)
             {
-                for (int j = 0; j < mat.GetLength(1); j++)
+                if (cobra.Corpo[0, i] == linha && cobra.Corpo[1, i] == coluna)
                 {
-                    if (i == 0)
-                    {
-                        mat[i, j] = "■";
-                    }
-                    else if (i == mat.GetLength(0) - 1)
-                    {
-                        mat[i, j] = "■";
-                    }
-                    else if (j == 0)
-                    {
-                        mat[i, j] = "■";
-                    }
-                    else if (j == mat.GetLength(1) - 1)
-                    {
-                        mat[i, j] = "■";
-                    }
-                    else
-                    {
-                        mat[i, j] = " ";
-                    }
+                    return true;
                 }
             }
+            return false;
+        }
 
-            mat[linhaAlimento, colunaAlimento] = "A";
+        public void Desenhar(Cobra cobra)
+        {
+            Console.Clear();
 
-            for (int i = 0; i < mat.GetLength(0); i++)
+            for (int i = 0; i < linhas; i++)
             {
-                for (int j = 0; j < mat.GetLength(1); j++)
+                for (int j = 0; j < colunas; j++)
                 {
-                    if (i == linhaAlimento && j == colunaAlimento)
+                    if (i == 0 || i == linhas - 1 || j == 0 || j == colunas - 1)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("■");
+                        Console.ResetColor();
+                    }
+                    else if (i == linhaAlimento && j == colunaAlimento)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("●");  
+                        Console.Write("●");
+                        Console.ResetColor();
+                    }
+                    else if (EhCobra(cobra, i, j))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("■");
                         Console.ResetColor();
                     }
                     else
                     {
-                        Console.Write(mat[i, j]);
+                        Console.Write(" ");
                     }
                 }
                 Console.WriteLine();
