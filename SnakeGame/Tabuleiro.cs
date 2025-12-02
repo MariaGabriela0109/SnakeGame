@@ -84,7 +84,7 @@ namespace SnakeGame
                     {
                         mat[i, j] = "■";
                     }
-                    else if(i == mat.GetLength(0) - 1)
+                    else if (i == mat.GetLength(0) - 1)
                     {
                         mat[i, j] = "■";
                     }
@@ -102,17 +102,28 @@ namespace SnakeGame
                     }
                 }
             }
+
+            mat[linhaAlimento, colunaAlimento] = "A";
+
             for (int i = 0; i < mat.GetLength(0); i++)
             {
                 for (int j = 0; j < mat.GetLength(1); j++)
                 {
-                    Console.Write(mat[i, j]);
+                    if (i == linhaAlimento && j == colunaAlimento)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("●");  
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.Write(mat[i, j]);
+                    }
                 }
                 Console.WriteLine();
             }
-
-
         }
+
 
 
     }
